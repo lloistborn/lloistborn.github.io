@@ -2,7 +2,7 @@
 This post will go through most of scenarios of how to satisfy the requirement of unit tests and example of test cases that are considered as important.
 
 ## problem
-Using this application structure, we should focus on writing unit tests for the `Application`'s layer only. Because `Application` layer is where we build our business logic. Other layer should not be included when we are writing unit tests. 
+Using this application structure, we should focus on writing unit tests for the `Application`'s layer only, since this layer is where we build our business logic. Other layer should not be included when writing unit tests. 
 
 In some events, you might think unit test is also important for other layer like `Infrastructure`. In this case, that means you have a business logic spread on other layer than `Application`, which is not ideal. 
 
@@ -119,9 +119,9 @@ public Task TestGetCoordinateDetails_ThenReturnLocationDetails() {
 }
 ```
 
-The function format naming is also important part of writing test function. This is because unit test also played role as self documentation. It is explaining what to expect from a the function being test.
+The function format naming is also important part of writing test function. This is because unit test also played role as self documentation. It is explaining what to expect from the function being test.
 
-The function is usually using this format that make it easy to understand
+The function is usually using this format that make it easy to understand:
 ```
 1. TestFunctionName
 2. ThenWhatWillHappen
@@ -133,7 +133,7 @@ Based on the logic in the normal flow, here are the negative cases:
 1. TestGetCoordinateDetails_WhenLocationHasNotFoundFromHttpClient_ReturnLocationNotFound
 2. TestGetCoordinateDetails_WhenLocationHasNotFoundInDb_ReturnLocationNotFound
 
-Any other negative cases like timeout issue or DB connection issue will should not be included here as we are only focusing on the business logic.
+Any other negative cases like timeout or DB connection issue should not be included here as we are only focusing on the business logic.
 
 ```c#
 @Test
@@ -183,7 +183,7 @@ public Task TestGetCoordinateDetails_WhenLocationHasNotFoundInDb_ReturnLocationN
 
 ✅ Start with happy-normal case then continue with negative cases.
 
-✅ Create clear function name for each unit test by following actual flow of of the code.
+✅ Create clear function name for each unit test by following actual flow of the code.
 
 ✅ Use the AAA format for the test function.
 
