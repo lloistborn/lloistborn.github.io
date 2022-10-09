@@ -1,6 +1,23 @@
 ## intent
+This post will go through most of scenarios of how to satisfy the requirement of unit tests and example of test cases that are considered as important.
 
 ## problem
+Using this application structure, we should focus on writing unit tests for the `Application`'s layer only. Because `Application` layer is where we build our business logic. Other layer should not be included when we are writing unit tests. 
+
+In some events, you might think unit test is also important for other layer like `Infrastructure`. In this case, that means you have a business logic spread on other layer than `Application`, which is not ideal. 
+
+```bash
+├── Insfrastructure
+│   ├── Repository
+│   ├── Controller
+├── Middleware
+│   ├── Exception Logic
+│   ├── Logger
+├── Application
+│   ├── Business Layer
+│   ├── Utilities
+```
+
 
 ## example
 Sample of business layer that we want to test are having dependencies to a repo and networking layer.
@@ -8,12 +25,12 @@ Sample of business layer that we want to test are having dependencies to a repo 
 *application structure*
 ```bash
 ├── Application
-|   ├── Services                    
-|   │   ├── CoordinateService.cs
-|   ├── Repository                  
-|   │   ├── CoordinateRepo.cs
-|   ├── HttpClient
-|   │   ├── CoordinateClient.cs          
+│   ├── Services                    
+│   │   ├── CoordinateService.cs
+├── Repository                  
+│   ├── CoordinateRepo.cs
+├── HttpClient
+│   ├── CoordinateClient.cs          
 ```
 *process*
 
@@ -24,7 +41,7 @@ The image below shows how `CoordinateService.cs` is communicating with `Reposito
 *code*
 
 ```c#
-public class ICoordinateHandler {
+public interface ICoordinateHandler {
     Task<Coordinate> GetCoordinateDetails(double lng, double lat);
 }
 
@@ -58,7 +75,7 @@ The function `GetCoordinateDetails` does exactly this purpose:
 > Given coordinate longitude and latitude with any decimal numbers, search for its location details
 
 
-Firstly,lets setup the test class
+Firstly, lets setup the test class
 
 ```c#
 public class CoordinateServiceTests {
@@ -82,28 +99,100 @@ Notice that, we are mocking the `ICoordinateRepo` and the `ICoordinateClient`. T
 On that sense, here is the normal happy case:
 ```c#
 @Test
-public Task TestGetCoordinateDetails_ReturnLocationDetails() {
+public Task TestGetCoordinateDetails_ThenReturnLocationDetails() {
+    // arrange
+    var coordinate = new Coordinate() { 
+        hasFound: true,
+        area_id:  1123
+    };
 
+    _mockClient.Setup(f => f.getLocation(It.IsAny<double>(), It.IsAny<double>()))
+        .ReturnsAsync(coordinate);
+    _mockRepo.Setup(f => f.getLocationDetails(coordinate.area_id))
+        .ReturnAsync(new Coordinate() {hasFound: true, area_id: 1123, area_name: "downtown"});
+
+    // act
+    var actualResult = await service.GetCoordinateDetails(24.33, 55.00);
+
+    // asert
+    Assert.IsFalse(actualResult.hasNotFound());
 }
 ```
 
-Based on the logic here are the negative cases:
+The function format naming is also important part of writing test function. This is because unit test also played role as self documentation. It is explaining what to expect from a the function being test.
+
+The function is usually using this format that make it easy to understand
+```
+1. TestFunctionName
+2. ThenWhatWillHappen
+
+void TestFunctionName_ThenWhatWillHappen()
+```
+
+Based on the logic in the normal flow, here are the negative cases:
 1. TestGetCoordinateDetails_WhenLocationHasNotFoundFromHttpClient_ReturnLocationNotFound
 2. TestGetCoordinateDetails_WhenLocationHasNotFoundInDb_ReturnLocationNotFound
 
-Any other negative cases like timeout issue or DB connection issue will be covered on the Integration Tests post.
+Any other negative cases like timeout issue or DB connection issue will should not be included here as we are only focusing on the business logic.
 
 ```c#
 @Test
 public Task TestGetCoordinateDetails_WhenLocationHasNotFoundFromHttpClient_ReturnLocationNotFound() {
-    
+    // arrange
+    var coordinate = new Coordinate() { 
+        hasFound: false
+    };
+
+    _mockClient.Setup(f => f.getLocation(It.IsAny<double>(), It.IsAny<double>()))
+        .ReturnsAsync(coordinate);
+
+    // act
+    var actualResult = await service.GetCoordinateDetails(24.33, 55.00);
+
+    // asert
+    Assert.IsTrue(actualResult.hasNotFound());    
 }
 
 
 @Test
 public Task TestGetCoordinateDetails_WhenLocationHasNotFoundInDb_ReturnLocationNotFound() {
+    // arrange
+    var coordinate = new Coordinate() { 
+        hasFound: true,
+        area_id:  1123
+    };
+
+    _mockClient.Setup(f => f.getLocation(It.IsAny<double>(), It.IsAny<double>()))
+        .ReturnsAsync(coordinate);
+    _mockRepo.Setup(f => f.getLocationDetails(coordinate.area_id))
+        .ReturnAsync(new Coordinate() {hasNotFound: true);
+
+    // act
+    var actualResult = await service.GetCoordinateDetails(24.33, 55.00);
+
+    // asert
+    Assert.IsTrue(actualResult.hasNotFound());
     
 }
 ```
 
 ## rules of thumbs
+*Do's*
+
+✅ Always write unit tests for the business logic.
+
+✅ Start with happy-normal case then continue with negative cases.
+
+✅ Create clear function name for each unit test by following actual flow of of the code.
+
+✅ Use the AAA format for the test function.
+
+✅ Write as many as possible test cases.
+
+*Dont's*
+
+🙅‍♂️ Write unit tests for other layer than the Business.
+
+🙅‍♂️ Not providing enough negative cases.
+
+🙅‍♂️ Calling too many function being tests.
