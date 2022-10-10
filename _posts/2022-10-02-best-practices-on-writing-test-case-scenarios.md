@@ -1,4 +1,4 @@
-## intent
+## Overview
 This post will go through most of scenarios of how to satisfy the requirement of unit tests and example of test cases that are considered as important.
 
 ## problem
@@ -179,20 +179,13 @@ public Task TestGetCoordinateDetails_WhenLocationHasNotFoundInDb_ReturnLocationN
 ## rules of thumbs
 *Do's*
 
-✅ Always write unit tests for the business logic.
-
-✅ Start with happy-normal case then continue with negative cases.
-
-✅ Create clear function name for each unit test by following actual flow of the code.
-
-✅ Use the AAA format for the test function.
-
-✅ Write as many as possible test cases.
+- ✅ Always write unit tests for the business logic.
+- ✅ Start with happy-normal case then continue with negative cases.
+- ✅ Create clear function name for each unit test by following actual flow of the code.
+- ✅ Use the AAA format for the test function.
+- ✅ Write as many as possible test cases.
 
 *Dont's*
-
-🙅‍♂️ Write unit tests for other layer than the Business.
-
-🙅‍♂️ Not providing enough negative cases.
-
-🙅‍♂️ Calling too many function being tests.
+- 🙅‍♂️ Write unit tests for other layer than the Business.
+- 🙅‍♂️ Not providing enough negative cases.
+- 🙅‍♂️ Calling too many function being tests.
