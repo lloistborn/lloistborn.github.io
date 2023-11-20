@@ -71,7 +71,7 @@ of probl**ems** (and explains **why the** paper boy is now drivin**g a L**exus).
 
 3. Ins**tea**d of asking for the wallet, t**he paperb**oy should tell the customer to pay **the $2.00.**
 
-### Conclusion
+# Last but not least
 Code should work the same way—we want to tell objects what to do, not ask them for their state. 
 
 Adhering to this notion of “Tell, Don’t Ask” is easier if you mentally categorize each of your functions and methods as either a command or a query and document them as such in the source code (it helps if all commands are grouped together and all queries are grouped together).
