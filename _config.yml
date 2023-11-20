@@ -24,8 +24,8 @@ description              : "product engineering practice"
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : https://user-images.githubusercontent.com/4990180/284109811-c76f2dbc-c9b1-45c2-baae-69dfaf652ca1.svg
-logo                     : https://user-images.githubusercontent.com/4990180/284109811-c76f2dbc-c9b1-45c2-baae-69dfaf652ca1.svg
+teaser                   : https://user-images.githubusercontent.com/4990180/284139902-b695f6e1-cc82-41ce-bd11-c8d72e68c575.svg
+logo                     : https://user-images.githubusercontent.com/4990180/284139902-b695f6e1-cc82-41ce-bd11-c8d72e68c575.svg
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 breadcrumbs              : true
 words_per_minute         : 200
