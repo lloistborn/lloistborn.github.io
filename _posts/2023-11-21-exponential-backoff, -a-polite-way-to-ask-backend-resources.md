@@ -8,6 +8,6 @@ Looking at this problem from the customer's perspective, having this retry patte
 the same call until it succeeds.
 
 ## Retry Pattern
-![retry pattern drawio](https://github.com/lloistborn/lloistborn.github.io/assets/4990180/1f0aa1f2-7ea0-45e5-bade-a8465b26b661)
+![retry pattern drawio (2)](https://github.com/lloistborn/lloistborn.github.io/assets/4990180/7b1028ce-b9cf-4eed-937a-7ea2e8434ead)
 
 The image demonstrates how Frontend is calling Backend, notice that when Frontend calls receive an error, **it retries immediately**. Another issue arose when using this type of retry and the effect on our Backend is the same as sending a DDos type of attack.
