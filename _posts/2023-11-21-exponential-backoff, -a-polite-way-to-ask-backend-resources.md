@@ -29,7 +29,7 @@ Below is the updated scenario based on the diagram above. I added Exponential Ba
 <span>This is how **Exponential Backoff** works. </span>
 
 
-## Implementing it using TypeScript
+## Implementing it using JavaScript
 Here is how we can implement a combination of Retry Pattern with Exponential Backoff
 ```javascript
 function waitFor(milliseconds) {
