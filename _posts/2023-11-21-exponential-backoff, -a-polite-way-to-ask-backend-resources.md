@@ -26,7 +26,7 @@ Below is the updated scenario based on the diagram above. I added Exponential Ba
 <span>**The system then** retries the same call after waiting 2 seconds.</span><br>
 <span>**Notice** that the wait time is increased to 4 seconds before it retries</span><br>
 <span>**and eventually** gets a successful response.</span><br>
-<span> This is how** Exponential Backoff** works. </span>
+<span>This is how **Exponential Backoff** works. </span>
 
 
 ## Implementing it using TypeScript
