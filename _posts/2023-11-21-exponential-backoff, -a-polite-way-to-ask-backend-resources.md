@@ -30,15 +30,72 @@ Below is the updated scenario based on the diagram above. I added Exponential Ba
 
 
 ## Implementing it using TypeScript
-<div>
-  <img src="https://github.com/lloistborn/lloistborn.github.io/assets/4990180/d0cf1250-bf8c-45bc-bf21-f548dde402a8" alt="drawing" width="25" height="25"/>
-  <img src="https://github.com/lloistborn/lloistborn.github.io/assets/4990180/c238cd29-b0d4-4fa1-8945-15662edd13bf" alt="drawing" width="25" height="25"/>
-  <img src="https://github.com/lloistborn/lloistborn.github.io/assets/4990180/edf7231d-2122-4871-821a-deeff2a32116" alt="drawing" width="25" height="25"/>
-</div> <be>
-
-I love TypeScript, so lets implement using it
-
 Here is how we can implement a combination of Retry Pattern with Exponential Backoff
 ```
-// code here 
+function waitFor(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+function retry(promise, onRetry, maxRetries) {
+  async function retryWithBackoff(retries) {
+    try {
+      // Make sure we don't wait on the first attempt
+      if (retries > 0) {
+        // Here is where the magic happens.
+        // on every retry, we exponentially increase the time to wait.
+        // Here is how it looks for a `maxRetries` = 4
+        // (2 ** 1) * 100 = 200 ms
+        // (2 ** 2) * 100 = 400 ms
+        // (2 ** 3) * 100 = 800 ms
+        const timeToWait = 2 ** retries * 100;
+        console.log(`waiting for ${timeToWait}ms...`);
+        await waitFor(timeToWait);
+      }
+      return await promise();
+    } catch (e) {
+      if (retries < maxRetries) {
+        onRetry();
+        return retryWithBackoff(retries + 1);
+      } else {
+        console.warn("Max retries reached");
+        throw e;
+      }
+    }
+  }
+
+  return retryWithBackoff(0);
+}
 ```
+
+Now lets test the implementation
+```
+function generateFailableAPICall() {
+  let counter = 0;
+  return function () {
+    if (counter < 3) {
+      counter++;
+      return Promise.reject(new Error("Simulated error"));
+    } else {
+      return Promise.resolve({ status: "ok" });
+    }
+  };
+}
+
+/*** Testing our Retry with Exponential Backoff */
+async function test() {
+  const apiCall = generateFailableAPICall();
+  const result = await retry(
+    apiCall,
+    () => {
+      console.log("onRetry called...");
+    },
+    4
+  );
+
+  assert(result.status === "ok");
+}
+
+test();
+```
+
+_code is based on this [reference](https://bpaulino.com/entries/retrying-api-calls-with-exponential-backoff)_
