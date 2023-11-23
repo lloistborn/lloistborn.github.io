@@ -1,6 +1,6 @@
 ## Overview
 There are a lot of things that need to be clarified about how developers handle errors. Golang programmers, in particular, think this is the best way to do it.
-```
+```golang
 if err != nil {
 }
 ```
@@ -11,7 +11,7 @@ Rob Pike in one of Golang documentation about [Errors are values](https://go.dev
 > Use the language to simplify your error handling.
 
 Moreover, he gave an example using the `bufio` package’s Scanner type
-```
+```golang
 scanner := bufio.NewScanner(input)
 for scanner.Scan() {
     token := scanner.Text()
@@ -30,7 +30,7 @@ From the example above, the `scanner.Err()` is basically demonstrating the same 
 The client implementation becomes much less complicated because error is expected.
 
 ### Compliant code ✅
-```
+```golang
 for scanner.Scan() {
     token := scanner.Text()
     // process token
@@ -42,11 +42,11 @@ if err := scanner.Err(); err != nil {
 
 ### Non-compliant code 🚩
 Using the same example, let us see how we can check an error when Scanner does not have `.Err()`. The implementation could be like this
-```
+```golang
 func (s *Scanner) Scan() (token []byte, error)
 ```
 So the client implementation might be like this
-```
+```golang
 scanner := bufio.NewScanner(input)
 for {
     token, err := scanner.Scan()
