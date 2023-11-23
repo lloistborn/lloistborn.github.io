@@ -1,3 +1,5 @@
+
+
 ## Overview
 When building a solution related to RPC calls between frontend and backend,
 developers need to consider handling errors due to unreliable networking or because
@@ -15,7 +17,16 @@ The image demonstrates how Frontend is calling Backend; notice that when Fronten
 However, another issue arose when using this type of retry, and the effect on our Backend is the same as sending a DDos type of attack.
 
 ## Polite Way of Retrying using Exponential Backoff
-By using the same scenario, lets update the previous scenario by adding Exponential Backoff into the diagram.
+Below is the updated scenario based on the diagram above. I added Exponential Backoff into concern for each retry except the first.
+
+![faisalmorensyadotdev-resources drawio (1)](https://github.com/lloistborn/lloistborn.github.io/assets/4990180/648e6b73-9382-4dec-95f0-5f2ec32fea8c)
+
+<span>**Let's** start with the first request that leads to an error response.</span><br>
+<span>**Instead of immediately** retrying the request, the call waits 2 seconds.</span><br>
+<span>**The system then** retries the same call after waiting 2 seconds.</span><br>
+<span>**Notice** that the wait time is increased to 4 seconds before it retries</span><br>
+<span>**and eventually** gets a successful response.</span><br>
+<span> This is how** Exponential Backoff** works. </span>
 
 
 ## Implementing it using TypeScript
