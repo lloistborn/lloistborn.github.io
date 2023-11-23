@@ -31,7 +31,7 @@ Below is the updated scenario based on the diagram above. I added Exponential Ba
 
 ## Implementing it using TypeScript
 Here is how we can implement a combination of Retry Pattern with Exponential Backoff
-```
+```javascript
 function waitFor(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
@@ -67,8 +67,8 @@ function retry(promise, onRetry, maxRetries) {
 }
 ```
 
-Now lets test the implementation
-```
+Now, let's test the implementation.
+```javascript
 function generateFailableAPICall() {
   let counter = 0;
   return function () {
