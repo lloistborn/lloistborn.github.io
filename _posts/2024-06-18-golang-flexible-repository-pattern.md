@@ -57,38 +57,37 @@ To use the repository, we instantiate it with either a Context or a Transaction.
 package main
 
 import (
-	"fmt"
-	"repository"
-	"gofr.dev/pkg/gofr/datasource/sql"
+    "fmt"
+    "repository"
+    "gofr.dev/pkg/gofr/datasource/sql"
 )
 
 func main() {
-	// Assuming we have a valid SQL database connection
-	db := gofrSQL.NewDB("your-database-connection-string")
+    // Assuming we have a valid SQL database connection
+    db := gofrSQL.NewDB("your-database-connection-string")
 
-	// Prepare a statement using the Context
-	ctx := &repository.Context{SQL: db}
-	repoCtx := &repository.Repository{DB: ctx}
-	stmtCtx, err := repoCtx.DB.Prepare("SELECT * FROM users WHERE id = ?")
-	if err != nil {
-		fmt.Println("Error preparing statement with context:", err)
-	} else {
-		fmt.Println("Statement prepared with context:", stmtCtx)
-	}
+    // Prepare a statement using the Context
+    ctx := &repository.Context{SQL: db}
+    repoCtx := &repository.Repository{DB: ctx}
+    stmtCtx, err := repoCtx.DB.Prepare("SELECT * FROM users WHERE id = ?")
+    if err != nil {
+        fmt.Println("Error preparing statement with context:", err)
+    } else {
+        fmt.Println("Statement prepared with context:", stmtCtx)
+    }
 
-	// Prepare a statement using the Transaction
-	tx, err := db.Begin()
-	if err != nil {
-		panic(err)
-	}
-	transaction := &repository.Transaction{SQL: tx}
-	repoTx := &repository.Repository{DB: transaction}
-	stmtTx, err := repoTx.DB.Prepare("INSERT INTO users(name) VALUES(?)")
-	if err != nil {
-		fmt.Println("Error preparing statement with transaction:", err)
+    // Prepare a statement using the Transaction
+    tx, err := db.Begin()
+    if err != nil {
+        panic(err)
+    }
+    transaction := &repository.Transaction{SQL: tx}
+    repoTx := &repository.Repository{DB: transaction}
+    stmtTx, err := repoTx.DB.Prepare("INSERT INTO users(name) VALUES(?)")
+    if err != nil {
+        fmt.Println("Error preparing statement with transaction:", err)
         tx.Rollback()
-	}
+    }
     tx.Commit()
 }
-
 ```
