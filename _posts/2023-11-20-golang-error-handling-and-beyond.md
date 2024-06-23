@@ -1,4 +1,3 @@
-## Overview
 There are a lot of things that need to be clarified about how developers handle errors. Golang programmers, in particular, think this is the best way to do it.
 ```golang
 if err != nil {

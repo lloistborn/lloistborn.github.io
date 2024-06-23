@@ -1,6 +1,3 @@
-
-
-## Overview
 When building a solution related to RPC calls between frontend and backend,
 developers need to consider handling errors due to unreliable networking or because
 the backend is unavailable at some point. One of the strategies is using a **retry mechanism**.

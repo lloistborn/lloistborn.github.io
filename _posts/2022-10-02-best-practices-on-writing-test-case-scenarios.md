@@ -1,4 +1,3 @@
-## Overview
 This post will go through most of scenarios of how to satisfy the requirement of unit tests and example of test cases that are considered as important.
 
 ## problem
