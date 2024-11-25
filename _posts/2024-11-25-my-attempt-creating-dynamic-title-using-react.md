@@ -1,3 +1,5 @@
+In this post, I'll share my journey of implementing dynamic page titles in a Next.js application, including the challenges I faced and the solutions I discovered along the way.
+
 ## The Initial Approach: Direct Component State
 
 Like many developers, I started with what seemed like a straightforward task: displaying dynamic page titles based on the selected sidebar item in my Next.js application. My first attempt was refreshingly simple - just add a title to each page component:
@@ -19,7 +21,7 @@ As the application grew, I realized I was repeating these titles in multiple pla
 This violated the DRY (Don't Repeat Yourself) principle. I needed a better solution.
 
 ## The Navigation-Driven Approach
-I decided to make the navigation items the single source of truth. I enhanced my navigation items in `AppLayout.tsx` to include a `title` property:
+I decided to make the navigation items the single source of truth. I enhanced my navigation items in `AppLayout.tsx` to include a `pageTitle` property:
 
 ```jsx
 const navigationItems = [
@@ -42,7 +44,7 @@ const navigationItems = [
 ```
 
 ## The Context Conundrum
-To make these titles available throughout the app, I created a context:
+To make these titles available throughout the app, I created a `PageContext.tsx`:
 
 ```jsx
 const PageContext = createContext<PageContextType>({ currentPageTitle: undefined })
